@@ -1,8 +1,32 @@
+export interface ContaCorrente {
+  id: number;
+  numero: string;
+  nome: string;
+  titular: string;
+}
+
+export interface Anexo {
+  id: number;
+  nomeReduzido: string;
+  descricao: string;
+  dataInclusao: string;
+  idUsuario: string;
+}
+
 export interface Lancamento {
   id: number;
-  descricao: string;
+  contaCorrente: ContaCorrente;
   valor: number;
-  data: string;
+  historico: string;
+  estorno: boolean;
+  documento: string;
+  descricao: string;
+  situacao: 'Pendente' | 'Confirmado' | 'Rejeitado';
+  pa: string;
+  idEvento: string;
+  complHistorico: string;
+  situacaoCsc: string;
+  idDocCsc: string;
 }
 
 export interface Lote {

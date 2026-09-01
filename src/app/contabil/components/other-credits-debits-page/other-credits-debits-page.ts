@@ -6,11 +6,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Header } from "../../../shared/components/header/header";
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { EntryModalComponent } from '../entry-modal/entry-modal.component';
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { ContabilService } from '../../service/contabil.service';
-import { Lote, FiltrosPesquisa, ResultadoPesquisa } from '../../models/lote.model';
+import { Lote, FiltrosPesquisa, ResultadoPesquisa, Lancamento } from '../../models/lote.model';
 
 @Component({
   imports: [
@@ -21,6 +23,7 @@ import { Lote, FiltrosPesquisa, ResultadoPesquisa } from '../../models/lote.mode
     MatIconModule,
     MatTableModule,
     MatCheckboxModule,
+    MatDialogModule,
     Header,
     PaginationComponent,
     CurrencyBrPipe,
@@ -66,7 +69,8 @@ export class OtherCreditsDebitsPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private contabilService: ContabilService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -174,7 +178,19 @@ export class OtherCreditsDebitsPage implements OnInit {
   }
 
   onIncluir(): void {
-    console.log('Incluir');
+    const dialogRef = this.dialog.open(EntryModalComponent, {
+      width: '600px',
+      maxHeight: '90vh',
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (result: Lancamento | undefined): void => {
+        if (result) {
+          console.log('Lançamento criado:', result);
+        }
+      },
+    });
   }
 
   onAlterar(): void {

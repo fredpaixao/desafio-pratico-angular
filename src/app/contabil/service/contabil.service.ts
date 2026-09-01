@@ -1,11 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { Lote, FiltrosPesquisa, ResultadoPesquisa } from '../models/lote.model';
+import { Lote, FiltrosPesquisa, ResultadoPesquisa, ContaCorrente } from '../models/lote.model';
+
+export interface OptionValue {
+  value: string;
+  label: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContabilService {
+  private mockContasCorrentes: ContaCorrente[] = [
+    { id: 1, numero: '1001', nome: 'Conta Principal', titular: 'João Silva' },
+    { id: 2, numero: '1002', nome: 'Conta Operacional', titular: 'Maria Santos' },
+    { id: 3, numero: '1003', nome: 'Conta Investimento', titular: 'Pedro Costa' },
+    { id: 4, numero: '1004', nome: 'Conta Reserva', titular: 'Ana Oliveira' },
+    { id: 5, numero: '1005', nome: 'Conta Administrativo', titular: 'Carlos Mendes' },
+  ];
+
+  private mockHistoricos: OptionValue[] = [
+    { value: 'lancamento_manual', label: 'Lançamento Manual' },
+    { value: 'transferencia', label: 'Transferência' }
+  ];
+
+  private mockPA: OptionValue[] = [
+    { value: 'cooperativa', label: 'Cooperativa' },
+    { value: 'pessoa_fisica', label: 'Pessoa Física' },
+  ];
+
   private mockLotes: Lote[] = [
     {
       idLote: 1,
@@ -95,5 +118,31 @@ export class ContabilService {
   private parseDataISO(dataStr: string): Date {
     const [ano, mes, dia] = dataStr.split('-');
     return new Date(parseInt(ano), parseInt(mes) - 1, parseInt(dia));
+  }
+
+  buscarContasCorrentes(termo: string): Observable<ContaCorrente[]> {
+    const termoLower: string = termo.toLowerCase();
+    const contas: ContaCorrente[] = this.mockContasCorrentes.filter((conta: ContaCorrente) =>
+      conta.numero.includes(termoLower) ||
+      conta.nome.toLowerCase().includes(termoLower) ||
+      conta.titular.toLowerCase().includes(termoLower)
+    );
+
+    return of(contas).pipe(delay(300));
+  }
+
+  obterContaCorrente(numero: string): Observable<ContaCorrente | null> {
+    const conta: ContaCorrente | undefined = this.mockContasCorrentes.find(
+      (c: ContaCorrente) => c.numero === numero
+    );
+    return of(conta || null).pipe(delay(200));
+  }
+
+  obterHistoricos(): Observable<OptionValue[]> {
+    return of(this.mockHistoricos).pipe(delay(100));
+  }
+
+  obterPA(): Observable<OptionValue[]> {
+    return of(this.mockPA).pipe(delay(100));
   }
 }
