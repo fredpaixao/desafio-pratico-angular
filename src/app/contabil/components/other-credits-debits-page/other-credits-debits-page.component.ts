@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Header } from "../../../shared/components/header/header";
+import { Header } from "../../../shared/components/header/header.component";
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { EntryModalComponent } from '../entry-modal/entry-modal.component';
 import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
@@ -29,8 +29,8 @@ import { Lote, FiltrosPesquisa, ResultadoPesquisa, Lancamento } from '../../mode
     CurrencyBrPipe,
   ],
   selector: 'app-other-credits-debits-page',
-  styleUrl: './other-credits-debits-page.scss',
-  templateUrl: './other-credits-debits-page.html',
+  styleUrl: './other-credits-debits-page.component.scss',
+  templateUrl: './other-credits-debits-page.component.html',
 })
 export class OtherCreditsDebitsPage implements OnInit {
   filterForm!: FormGroup;

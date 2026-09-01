@@ -4,7 +4,7 @@ export const CONTABIL_ROUTES: Routes = [
   {
     path: 'outros-creditos-debitos',
     loadComponent: () =>
-      import('./components/other-credits-debits-page/other-credits-debits-page').then(
+      import('./components/other-credits-debits-page/other-credits-debits-page.component').then(
         (m) => m.OtherCreditsDebitsPage,
       ),
     data: {

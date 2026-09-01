@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   imports: [CommonModule, RouterLink, RouterLinkActive, MatIconModule],
   selector: 'app-sidebar',
-  styleUrl: './sidebar.scss',
-  templateUrl: './sidebar.html',
+  styleUrl: './sidebar.component.scss',
+  templateUrl: './sidebar.component.html',
 })
 export class Sidebar {
   menuItems = [{ label: 'Contábil', icon: 'menu_book', route: '/contabil/outros-creditos-debitos' }];

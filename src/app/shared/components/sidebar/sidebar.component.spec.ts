@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { OtherCreditsDebitsPage } from './other-credits-debits-page';
+import { Sidebar } from '../../../shared/components/sidebar/sidebar.component';
 
-describe('OtherCreditsDebitsPage', () => {
-  let component: OtherCreditsDebitsPage;
-  let fixture: ComponentFixture<OtherCreditsDebitsPage>;
+describe('Sidebar', () => {
+  let component: Sidebar;
+  let fixture: ComponentFixture<Sidebar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OtherCreditsDebitsPage],
+      imports: [Sidebar],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OtherCreditsDebitsPage);
+    fixture = TestBed.createComponent(Sidebar);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

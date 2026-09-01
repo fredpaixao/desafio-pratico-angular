@@ -12,8 +12,8 @@ interface BreadcrumbItem {
 @Component({
   imports: [CommonModule, RouterLink],
   selector: 'app-header',
-  styleUrl: './header.scss',
-  templateUrl: './header.html',
+  styleUrl: './header.component.scss',
+  templateUrl: './header.component.html',
 })
 export class Header implements OnInit {
   title$!: Observable<string>;
