@@ -151,15 +151,15 @@
 
     <div class="actions-section">
       <div class="action-buttons">
-        <button mat-raised-button (click)="onConfirmar()">CONFIRMAR</button>
-        <button mat-stroked-button (click)="onEnviar()">ENVIAR</button>
-        <button mat-stroked-button (click)="onVisualizarJustificativa()">
+        <button mat-raised-button (click)="onConfirmar()" [disabled]="!canConfirmar">CONFIRMAR</button>
+        <button mat-stroked-button (click)="onEnviar()" [disabled]="!canEnviar">ENVIAR</button>
+        <button mat-stroked-button (click)="onVisualizarJustificativa()" [disabled]="!canVisualizarJustificativa">
           VISUALIZAR JUSTIFICATIVA
         </button>
-        <button mat-stroked-button color="primary" (click)="onIncluir()">INCLUIR</button>
-        <button mat-stroked-button (click)="onAlterar()">ALTERAR</button>
-        <button mat-stroked-button (click)="onExcluir()">EXCLUIR</button>
-        <button mat-stroked-button (click)="onVisualizar()">VISUALIZAR</button>
+        <button mat-stroked-button color="primary" (click)="onIncluir()" [disabled]="!canIncluir">INCLUIR</button>
+        <button mat-stroked-button (click)="onAlterar()" [disabled]="!canAlterarExcluirVisualizar">ALTERAR</button>
+        <button mat-stroked-button (click)="onExcluir()" [disabled]="!canAlterarExcluirVisualizar">EXCLUIR</button>
+        <button mat-stroked-button (click)="onVisualizar()" [disabled]="!canAlterarExcluirVisualizar">VISUALIZAR</button>
       </div>
     </div>
 
@@ -168,10 +168,20 @@
         <table mat-table [dataSource]="tableData" class="data-table">
           <ng-container matColumnDef="checkbox">
             <th mat-header-cell *matHeaderCellDef>
-              <input type="checkbox" />
+              <input
+                aria-label="Selecionar Todos os Lotes"
+                type="checkbox"
+                [checked]="isAllSelected"
+                (change)="toggleSelectAll($event)"
+              />
             </th>
             <td mat-cell *matCellDef="let element">
-              <input type="checkbox" />
+              <input
+                aria-label="Selecionar esse lote"
+                type="checkbox"
+                [checked]="isLoteSelected(element.idLote)"
+                (change)="toggleSelectLote(element.idLote, $event)"
+              />
             </td>
           </ng-container>
 
@@ -187,7 +197,7 @@
 
           <ng-container matColumnDef="valor">
             <th mat-header-cell *matHeaderCellDef>Valor</th>
-            <td mat-cell *matCellDef="let element">{{ element.valor }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.valor | currencyBr }}</td>
           </ng-container>
 
           <ng-container matColumnDef="quantLancamentos">
@@ -221,14 +231,12 @@
       </div>
 
       <div class="pagination-wrapper">
-        <mat-paginator
-          #paginator
-          [length]="tableData.length"
-          [pageSize]="10"
-          [pageSizeOptions]="[5, 10, 25, 50]"
-          showFirstLastButtons
-        >
-        </mat-paginator>
+        <app-pagination
+          [totalItems]="totalResultados"
+          [pageSize]="pageSize"
+          [pageIndex]="pageIndex"
+          (pageChange)="onPageChange($event)"
+        ></app-pagination>
       </div>
     </div>
   </div>

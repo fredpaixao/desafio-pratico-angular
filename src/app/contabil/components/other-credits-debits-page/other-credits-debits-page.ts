@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Header } from "../../../shared/components/header/header";
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { ContabilService } from '../../service/contabil.service';
 import { Lote, FiltrosPesquisa, ResultadoPesquisa } from '../../models/lote.model';
 
@@ -19,17 +20,16 @@ import { Lote, FiltrosPesquisa, ResultadoPesquisa } from '../../models/lote.mode
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    MatPaginatorModule,
     MatCheckboxModule,
     Header,
+    PaginationComponent,
+    CurrencyBrPipe,
   ],
   selector: 'app-other-credits-debits-page',
   styleUrl: './other-credits-debits-page.scss',
   templateUrl: './other-credits-debits-page.html',
 })
 export class OtherCreditsDebitsPage implements OnInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   filterForm!: FormGroup;
   displayedColumns: string[] = [
     'checkbox',
@@ -45,6 +45,16 @@ export class OtherCreditsDebitsPage implements OnInit {
   tableData: Lote[] = [];
   isLoading: boolean = false;
   totalResultados: number = 0;
+  selectedLoteIds: number[] = [];
+  pageIndex: number = 0;
+  pageSize: number = 5;
+
+  isAllSelected: boolean = false;
+  canAlterarExcluirVisualizar: boolean = false;
+  canConfirmar: boolean = true;
+  canEnviar: boolean = true;
+  canVisualizarJustificativa: boolean = true;
+  canIncluir: boolean = true;
 
   situacaoOptions: Array<{ value: string; label: string }> = [
     { value: 'todas', label: 'Todas' },
@@ -79,9 +89,12 @@ export class OtherCreditsDebitsPage implements OnInit {
 
   onSearch(): void {
     this.isLoading = true;
+    this.pageIndex = 0;
+    this.selectedLoteIds = [];
+    this.updateButtonStates();
     const filtros: FiltrosPesquisa = this.filterForm.value;
 
-    this.contabilService.pesquisarLotes(filtros, 0, 10).subscribe({
+    this.contabilService.pesquisarLotes(filtros, this.pageIndex, this.pageSize).subscribe({
       next: (resultado: ResultadoPesquisa): void => {
         this.tableData = resultado.lotes;
         this.totalResultados = resultado.total;
@@ -97,6 +110,55 @@ export class OtherCreditsDebitsPage implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  onPageChange(event: { pageIndex: number; pageSize: number }): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.selectedLoteIds = [];
+    this.updateButtonStates();
+    const filtros: FiltrosPesquisa = this.filterForm.value;
+
+    this.contabilService.pesquisarLotes(filtros, this.pageIndex, this.pageSize).subscribe({
+      next: (resultado: ResultadoPesquisa): void => {
+        this.tableData = resultado.lotes;
+        this.cdr.detectChanges();
+      },
+      error: (erro: unknown): void => {
+        console.error('Erro ao carregar página:', erro);
+        this.tableData = [];
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  toggleSelectAll(event: any): void {
+    if (event.target.checked) {
+      this.selectedLoteIds = this.tableData.map((lote: Lote) => lote.idLote);
+    } else {
+      this.selectedLoteIds = [];
+    }
+    this.updateButtonStates();
+  }
+
+  toggleSelectLote(idLote: number, event: any): void {
+    if (event.target.checked) {
+      if (!this.selectedLoteIds.includes(idLote)) {
+        this.selectedLoteIds.push(idLote);
+      }
+    } else {
+      this.selectedLoteIds = this.selectedLoteIds.filter((id: number) => id !== idLote);
+    }
+    this.updateButtonStates();
+  }
+
+  isLoteSelected(idLote: number): boolean {
+    return this.selectedLoteIds.includes(idLote);
+  }
+
+  private updateButtonStates(): void {
+    this.isAllSelected = this.tableData.length > 0 && this.selectedLoteIds.length === this.tableData.length;
+    this.canAlterarExcluirVisualizar = this.selectedLoteIds.length === 1;
   }
 
   onConfirmar(): void {
