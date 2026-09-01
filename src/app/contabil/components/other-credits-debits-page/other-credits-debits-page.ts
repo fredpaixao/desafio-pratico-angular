@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -8,6 +8,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Header } from "../../../shared/components/header/header";
+import { ContabilService } from '../../service/contabil.service';
+import { Lote, FiltrosPesquisa, ResultadoPesquisa } from '../../models/lote.model';
 
 @Component({
   imports: [
@@ -40,20 +42,25 @@ export class OtherCreditsDebitsPage implements OnInit {
     'situacaoLote',
     'dataHoraSituacao',
   ];
-  tableData: any[] = [];
+  tableData: Lote[] = [];
+  isLoading: boolean = false;
+  totalResultados: number = 0;
 
-  situacaoOptions = [
+  situacaoOptions: Array<{ value: string; label: string }> = [
     { value: 'todas', label: 'Todas' },
     { value: 'aberto', label: 'Aberto' },
     { value: 'enviado', label: 'Enviado' },
     { value: 'confirmado', label: 'Confirmado' },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private contabilService: ContabilService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadTableData();
   }
 
   initializeForm(): void {
@@ -70,24 +77,26 @@ export class OtherCreditsDebitsPage implements OnInit {
     });
   }
 
-  loadTableData(): void {
-    this.tableData = Array(10)
-      .fill(null)
-      .map((_, i) => ({
-        id: i + 1,
-        idLote: i + 1,
-        dataEntrada: '26/04/2026',
-        valor: '1.000,00',
-        quantLancamentos: '1',
-        usuarioRegistro: 'gsarq0300_00',
-        usuarioAprovacao: '-',
-        situacaoLote: 'Aberto',
-        dataHoraSituacao: '27/04/2026, 12:35:11',
-      }));
-  }
-
   onSearch(): void {
-    console.log('Filtros aplicados:', this.filterForm.value);
+    this.isLoading = true;
+    const filtros: FiltrosPesquisa = this.filterForm.value;
+
+    this.contabilService.pesquisarLotes(filtros, 0, 10).subscribe({
+      next: (resultado: ResultadoPesquisa): void => {
+        this.tableData = resultado.lotes;
+        this.totalResultados = resultado.total;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        console.log('Pesquisa concluída:', resultado);
+      },
+      error: (erro: unknown): void => {
+        console.error('Erro na pesquisa:', erro);
+        this.isLoading = false;
+        this.tableData = [];
+        this.totalResultados = 0;
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   onConfirmar(): void {

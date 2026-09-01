@@ -136,7 +136,14 @@
           </div>
 
           <div class="filter-actions">
-            <button mat-raised-button color="primary" (click)="onSearch()">Pesquisar</button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onSearch()"
+              [disabled]="isLoading"
+              type="button">
+              {{ isLoading ? 'Carregando...' : 'Pesquisar' }}
+            </button>
           </div>
         </form>
       </mat-expansion-panel>
