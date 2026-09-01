@@ -1,1 +1,21 @@
-<p>header works!</p>
+<header class="header">
+  <div class="header-title">
+    <h2>{{ title$ | async }}</h2>
+  </div>
+  <div class="breadcrumb">
+    @for (item of (breadcrumb$ | async) || []; track $index; let last = $last) {
+      @if (item.route) {
+        <a [routerLink]="item.route" class="breadcrumb-link">
+          {{ item.label }}
+        </a>
+      } @else {
+        <span class="breadcrumb-text">{{ item.label }}</span>
+      }
+      @if (!last) {
+        <span class="separator">&gt;</span>
+      }
+    }
+  </div>
+</header>
+
+
