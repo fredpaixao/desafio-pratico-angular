@@ -1,10 +1,12 @@
+@import '../../../../styles-variables.scss';
+
 .header {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 20px;
   background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid $color-border-light;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
@@ -20,7 +22,7 @@
   h2 {
     margin: 0;
     font-size: 24px;
-    color: #20c997;
+    color: $color-primary-dark;
 
     @media (max-width: 768px) {
       font-size: 20px;
@@ -55,7 +57,7 @@
   }
 
   .breadcrumb-link {
-    color: #20c997;
+    color: $color-primary;
     text-decoration: none;
     cursor: pointer;
     transition: color 0.2s ease;
