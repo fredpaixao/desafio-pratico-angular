@@ -1,21 +1,18 @@
-<div class="modal-container">
-  <div class="modal-header">
-    <h2>Incluir Lançamento</h2>
-    <button class="close-btn" (click)="onCancel()" type="button">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
+<input
+  #fileInput
+  type="file"
+  (change)="onFileSelected($event)"
+  class="file-input"
+  hidden
+/>
 
-  <div class="modal-content">
-    <input
-      #fileInput
-      type="file"
-      (change)="onFileSelected($event)"
-      class="file-input"
-      hidden
-    />
-
-    <form [formGroup]="entryForm" class="entry-form">
+<app-form-modal
+  [formGroup]="entryForm"
+  [title]="'Incluir Lançamento'"
+  [submitButtonText]="'Salvar'"
+  [cancelButtonText]="'Cancelar'"
+  (submitted)="onSubmit()"
+  (cancelled)="onCancel()">
       <div class="form-section">
         <h3>Conta Corrente</h3>
 
@@ -268,13 +265,5 @@
           }
         </div>
       </div>
-    </form>
-  </div>
 
-  <div class="modal-footer">
-    <button class="btn-cancel" (click)="onCancel()" type="button">Cancelar</button>
-    <button class="btn-submit" (click)="onSubmit()" [disabled]="!isFormValid()" type="button">
-      Salvar
-    </button>
-  </div>
-</div>
+  </app-form-modal>

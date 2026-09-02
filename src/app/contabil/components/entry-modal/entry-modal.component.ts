@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ContabilService, OptionValue } from '../../service/contabil.service';
 import { Lancamento, ContaCorrente, Anexo } from '../../models/lote.model';
+import { FormModalComponent } from '../../../shared/components/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-entry-modal',
@@ -20,6 +21,7 @@ import { Lancamento, ContaCorrente, Anexo } from '../../models/lote.model';
     MatButtonModule,
     MatIconModule,
     MatTableModule,
+    FormModalComponent,
   ],
   templateUrl: './entry-modal.component.html',
   styleUrl: './entry-modal.component.scss',

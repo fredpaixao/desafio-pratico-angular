@@ -1,0 +1,25 @@
+<div class="modal-container">
+  <div class="modal-header">
+    <h2>{{ title }}</h2>
+    <button class="close-btn" (click)="onCancel()" type="button" aria-label="Fechar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="formGroup" class="modal-content">
+    <ng-content></ng-content>
+  </form>
+
+  <div class="modal-footer">
+    <button class="btn-cancel" (click)="onCancel()" type="button">
+      {{ cancelButtonText }}
+    </button>
+    <button
+      class="btn-submit"
+      (click)="onSubmit()"
+      type="button"
+      [disabled]="formGroup.invalid">
+      {{ submitButtonText }}
+    </button>
+  </div>
+</div>
