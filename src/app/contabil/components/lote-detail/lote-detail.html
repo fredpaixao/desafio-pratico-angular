@@ -1,0 +1,61 @@
+<app-header></app-header>
+
+<div class="page-container">
+  @if (isLoading) {
+    <div class="loading-message">Carregando...</div>
+  } @else if (lote) {
+    <div class="lote-header">
+      <div class="lote-title">
+        <button class="btn-voltar" (click)="onVoltar()" aria-label="Voltar">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Lote #{{ lote.idLote }}</h1>
+      </div>
+
+      <div class="lote-info">
+        <div class="info-group">
+          <label>Situação</label>
+          <span class="info-value">{{ lote.situacaoLote }}</span>
+        </div>
+        <div class="info-group">
+          <label>Data Entrada</label>
+          <span class="info-value">{{ lote.dataEntrada }}</span>
+        </div>
+        <div class="info-group">
+          <label>Valor Total</label>
+          <span class="info-value">R$ {{ valorLoteCalculado }}</span>
+        </div>
+        <div class="info-group">
+          <label>Usuário Registro</label>
+          <span class="info-value">{{ lote.usuarioRegistro }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lancamentos-section">
+      <div class="lancamentos-header">
+        <h2>Lançamentos do Lote</h2>
+        <div class="lancamentos-actions">
+          <button mat-stroked-button (click)="onVisualizar()" [disabled]="lancamentosExcluirSelecionados.length !== 1">VISUALIZAR</button>
+          <button mat-raised-button color="primary" (click)="onIncluir()">INCLUIR</button>
+          <button mat-stroked-button (click)="onAlterar()" [disabled]="lancamentosExcluirSelecionados.length !== 1">ALTERAR</button>
+          <button mat-stroked-button (click)="onExcluir()" [disabled]="lancamentosExcluirSelecionados.length === 0">EXCLUIR</button>
+          <button mat-stroked-button (click)="onDuplicar()" [disabled]="lancamentosExcluirSelecionados.length !== 1">DUPLICAR</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <app-data-table
+          [dataSource]="lancamentos"
+          [columns]="tableColumnsLancamentos"
+          [displayColumns]="displayColumnsLancamentos"
+          [enableSelection]="true"
+          [identifierKey]="'id'"
+          (selectionChange)="onLancamentosSelectionChange($event)">
+        </app-data-table>
+      </div>
+    </div>
+  } @else {
+    <div class="error-message">Erro ao carregar lote. Redirecionando...</div>
+  }
+</div>

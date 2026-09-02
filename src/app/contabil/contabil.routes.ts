@@ -15,4 +15,19 @@ export const CONTABIL_ROUTES: Routes = [
       ],
     },
   },
+  {
+    path: 'lotes/:id',
+    loadComponent: () =>
+      import('./components/lote-detail/lote-detail').then(
+        (m) => m.LoteDetailComponent,
+      ),
+    data: {
+      title: 'Detalhe do Lote',
+      breadcrumb: [
+        { label: 'Início', route: '/contabil' },
+        { label: 'Outros Créditos/Débitos', route: '/contabil/outros-creditos-debitos' },
+        { label: 'Detalhe do Lote' },
+      ],
+    },
+  },
 ];

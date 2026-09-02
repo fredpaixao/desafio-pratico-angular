@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
@@ -81,7 +82,8 @@ export class OtherCreditsDebitsPage implements OnInit {
     private contabilService: ContabilService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -285,19 +287,10 @@ export class OtherCreditsDebitsPage implements OnInit {
   }
 
   onIncluir(): void {
-    const dialogRef = this.dialog.open(EntryModalComponent, {
-      width: '600px',
-      maxHeight: '90vh',
-      disableClose: false,
-    });
-
-    dialogRef.afterClosed().subscribe({
-      next: (result: Lancamento | undefined): void => {
-        if (result) {
-          console.log('Lançamento criado:', result);
-        }
-      },
-    });
+    if (this.selectedLotes.length === 1) {
+      const loteId = this.selectedLotes[0].idLote;
+      this.router.navigate([`/contabil/lotes/${loteId}`], { queryParams: { incluir: 'true' } });
+    }
   }
 
   onAlterar(): void {
@@ -309,7 +302,10 @@ export class OtherCreditsDebitsPage implements OnInit {
   }
 
   onVisualizar(): void {
-    console.log('Visualizar');
+    if (this.selectedLotes.length === 1) {
+      const loteId = this.selectedLotes[0].idLote;
+      this.router.navigate([`/contabil/lotes/${loteId}`]);
+    }
   }
 
 }
