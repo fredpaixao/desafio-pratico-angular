@@ -1,0 +1,29 @@
+<div class="filter-panel-wrapper">
+  <mat-accordion class="filters-accordion">
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="filter-title">{{ title }}</span>
+          @if (subtitle) {
+            <span class="filter-subtitle">{{ subtitle }}</span>
+          }
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="formGroup" class="filter-form">
+        <ng-content></ng-content>
+
+        <div class="filter-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onSearch()"
+            type="button"
+          >
+            Pesquisar
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

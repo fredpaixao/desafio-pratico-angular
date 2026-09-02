@@ -1,153 +1,78 @@
 <app-header></app-header>
 <div class="page-container">
   <div class="filters-section">
-    <mat-accordion class="filters-accordion">
-      <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <span>Filtros</span>
-            <span>PESQUISAR LOTE OUTROS CRÉDITOS/DÉBITOS</span>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    <app-filter-panel
+      [formGroup]="filterForm"
+      [title]="'Filtros'"
+      [subtitle]="'PESQUISAR LOTE OUTROS CRÉDITOS/DÉBITOS'"
+      (searchClicked)="onSearch()"
+      (clearClicked)="onClearFilters()"
+    >
+      <div class="filter-layout">
+        <div class="filter-column-left">
+          <div class="filter-field">
+            <label for="instituicaoResp">Instituição Resp.</label>
+            <input id="instituicaoResp" formControlName="instituicaoResp" aria-label="Instituição Responsável" />
+          </div>
+          <div class="filter-field">
+            <label for="instituicao">Instituição</label>
+            <input id="instituicao" formControlName="instituicao" aria-label="Instituição" />
+          </div>
+          <div class="filter-field">
+            <label for="situacaoLote">Situação Lote</label>
+            <select id="situacaoLote" formControlName="situacaoLote" aria-label="Situação do Lote">
+              <option *ngFor="let option of situacaoOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-        <form [formGroup]="filterForm" class="filter-form">
-          <div class="filter-row-paired">
-            <div class="filter-column">
-              <div class="form-group">
-                <label for="instituicaoResp">Instituição Resp.</label>
-                <input
-                  id="instituicaoResp"
-                  type="text"
-                  formControlName="instituicaoResp"
-                  aria-label="Instituição Responsável"
-                />
-              </div>
+        <div class="filter-column-ranges">
+          <div class="filter-range-group">
+            <label for="idLoteFrom">ID Lote</label>
+            <div class="range-inputs">
+              <input id="idLoteFrom" formControlName="idLoteFrom" type="number" placeholder="De" (blur)="filterForm.markAllAsTouched()" aria-label="ID Lote - De" />
+              <input id="idLoteTo" formControlName="idLoteTo" type="number" placeholder="Até" (blur)="filterForm.markAllAsTouched()" aria-label="ID Lote - Até" />
             </div>
-
-            <div class="filter-column">
-              <div class="range-group">
-                <label>ID Lote</label>
-                <div class="range-inputs">
-                  <div class="form-group">
-                    <input
-                      type="number"
-                      placeholder="De"
-                      formControlName="idLoteFrom"
-                      aria-label="ID Lote - De"
-                      class="range-input"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="number"
-                      placeholder="Até"
-                      formControlName="idLoteTo"
-                      aria-label="ID Lote - Até"
-                      class="range-input"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            @if (getFieldError('idLoteFrom')) {
+              <span class="error-message" role="alert">{{ getFieldError('idLoteFrom') }}</span>
+            }
+            @if (getFieldError('idLoteTo')) {
+              <span class="error-message" role="alert">{{ getFieldError('idLoteTo') }}</span>
+            }
           </div>
 
-          <div class="filter-row-paired">
-            <div class="filter-column">
-              <div class="form-group">
-                <label for="instituicao">Instituição</label>
-                <input
-                  id="instituicao"
-                  type="text"
-                  formControlName="instituicao"
-                  aria-label="Instituição"
-                />
-              </div>
+          <div class="filter-range-group">
+            <label for="valorLoteFrom">Valor Lote</label>
+            <div class="range-inputs">
+              <input id="valorLoteFrom" formControlName="valorLoteFrom" type="number" placeholder="De" (blur)="filterForm.markAllAsTouched()" aria-label="Valor Lote - De" />
+              <input id="valorLoteTo" formControlName="valorLoteTo" type="number" placeholder="Até" (blur)="filterForm.markAllAsTouched()" aria-label="Valor Lote - Até" />
             </div>
-
-            <div class="filter-column">
-              <div class="range-group">
-                <label>Valor Lote</label>
-                <div class="range-inputs">
-                  <div class="form-group">
-                    <input
-                      type="number"
-                      placeholder="De"
-                      formControlName="valorLoteFrom"
-                      aria-label="Valor Lote - De"
-                      class="range-input"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="number"
-                      placeholder="Até"
-                      formControlName="valorLoteTo"
-                      aria-label="Valor Lote - Até"
-                      class="range-input"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            @if (getFieldError('valorLoteFrom')) {
+              <span class="error-message" role="alert">{{ getFieldError('valorLoteFrom') }}</span>
+            }
+            @if (getFieldError('valorLoteTo')) {
+              <span class="error-message" role="alert">{{ getFieldError('valorLoteTo') }}</span>
+            }
           </div>
 
-          <div class="filter-row-paired">
-            <div class="filter-column">
-              <div class="form-group">
-                <label for="situacaoLote">Situação Lote</label>
-                <select
-                  id="situacaoLote"
-                  formControlName="situacaoLote"
-                  aria-label="Situação Lote"
-                  class="custom-select"
-                >
-                  @for (option of situacaoOptions; track option.value) {
-                    <option [value]="option.value">
-                      {{ option.label }}
-                    </option>
-                  }
-                </select>
-              </div>
+          <div class="filter-range-group">
+            <label for="dataEntradaFrom">Data Entrada</label>
+            <div class="range-inputs">
+              <input id="dataEntradaFrom" formControlName="dataEntradaFrom" type="date" (blur)="filterForm.markAllAsTouched()" aria-label="Data Entrada - De" />
+              <input id="dataEntradaTo" formControlName="dataEntradaTo" type="date" (blur)="filterForm.markAllAsTouched()" aria-label="Data Entrada - Até" />
             </div>
-
-            <div class="filter-column">
-              <div class="range-group">
-                <label>Data Entrada</label>
-                <div class="range-inputs">
-                  <div class="form-group">
-                    <input
-                      type="date"
-                      formControlName="dataEntradaFrom"
-                      aria-label="Data Entrada - De"
-                      class="range-input"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="date"
-                      formControlName="dataEntradaTo"
-                      aria-label="Data Entrada - Até"
-                      class="range-input"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            @if (getFieldError('dataEntradaFrom')) {
+              <span class="error-message" role="alert">{{ getFieldError('dataEntradaFrom') }}</span>
+            }
+            @if (getFieldError('dataEntradaTo')) {
+              <span class="error-message" role="alert">{{ getFieldError('dataEntradaTo') }}</span>
+            }
           </div>
-
-          <div class="filter-actions">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="onSearch()"
-              [disabled]="isLoading"
-              type="button">
-              {{ isLoading ? 'Carregando...' : 'Pesquisar' }}
-            </button>
-          </div>
-        </form>
-      </mat-expansion-panel>
-    </mat-accordion>
+        </div>
+      </div>
+    </app-filter-panel>
 
     <div class="actions-section">
       <div class="action-buttons">
