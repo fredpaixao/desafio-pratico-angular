@@ -33,7 +33,7 @@ export class ContabilService {
     {
       idLote: 1,
       dataEntrada: '26/04/2026',
-      valor: '1.000,00',
+      valor: 1000,
       quantLancamentos: 1,
       usuarioRegistro: 'gsarq0300_00',
       usuarioAprovacao: '-',
@@ -43,7 +43,7 @@ export class ContabilService {
     {
       idLote: 2,
       dataEntrada: '25/04/2026',
-      valor: '2.500,00',
+      valor: 2500,
       quantLancamentos: 3,
       usuarioRegistro: 'user0001_00',
       usuarioAprovacao: 'aprv0001_00',
@@ -53,7 +53,7 @@ export class ContabilService {
     {
       idLote: 3,
       dataEntrada: '24/04/2026',
-      valor: '5.000,00',
+      valor: 5000,
       quantLancamentos: 5,
       usuarioRegistro: 'user0002_00',
       usuarioAprovacao: 'aprv0002_00',
@@ -91,7 +91,7 @@ export class ContabilService {
       const filtroIdLoteTo: boolean = !filtros.idLoteTo ||
         lote.idLote <= parseInt(filtros.idLoteTo);
 
-      const loteValorNumerico: number = parseFloat(lote.valor.replace(/\./g, '').replace(',', '.'));
+      const loteValorNumerico: number = lote.valor;
       const filtroValorFrom: boolean = !filtros.valorLoteFrom ||
         loteValorNumerico >= parseFloat(filtros.valorLoteFrom);
 

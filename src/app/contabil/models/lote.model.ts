@@ -32,7 +32,7 @@ export interface Lancamento {
 export interface Lote {
   idLote: number;
   dataEntrada: string;
-  valor: string;
+  valor: number;
   quantLancamentos: number;
   usuarioRegistro: string;
   usuarioAprovacao: string;

@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { Home } from './layouts/components/home/home.component';
+import { HomeComponent } from './layouts/components/home/home.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
+    component: HomeComponent,
     children: [
       {
         path: 'contabil',
