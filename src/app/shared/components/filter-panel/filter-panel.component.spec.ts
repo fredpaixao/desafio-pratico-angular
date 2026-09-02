@@ -31,15 +31,21 @@ describe('FilterPanelComponent', () => {
   });
 
   it('should emit searchClicked when onSearch is called', () => {
-    spyOn(component.searchClicked, 'emit');
+    let emitted = false;
+    component.searchClicked.subscribe(() => {
+      emitted = true;
+    });
     component.onSearch();
-    expect(component.searchClicked.emit).toHaveBeenCalled();
+    expect(emitted).toBe(true);
   });
 
   it('should emit clearClicked when onClear is called', () => {
-    spyOn(component.clearClicked, 'emit');
+    let emitted = false;
+    component.clearClicked.subscribe(() => {
+      emitted = true;
+    });
     component.onClear();
-    expect(component.clearClicked.emit).toHaveBeenCalled();
+    expect(emitted).toBe(true);
   });
 
   it('should display title and subtitle', () => {

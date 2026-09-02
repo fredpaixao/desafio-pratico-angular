@@ -4,10 +4,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "types": [
-      "vitest/globals"
-    ]
+      "jasmine"
+    ],
+    "module": "ES2020",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
   },
   "include": [
+    "src/test.ts",
     "src/**/*.d.ts",
     "src/**/*.spec.ts"
   ]

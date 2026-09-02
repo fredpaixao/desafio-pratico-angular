@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { OtherCreditsDebitsPage } from './other-credits-debits-page.component';
 
 describe('OtherCreditsDebitsPage', () => {
@@ -8,6 +10,16 @@ describe('OtherCreditsDebitsPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OtherCreditsDebitsPage],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { params: {} },
+            params: of({}),
+            data: of({})
+          }
+        }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(OtherCreditsDebitsPage);

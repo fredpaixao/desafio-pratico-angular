@@ -8,4 +8,4 @@ import { Sidebar } from '../../../shared/components/sidebar/sidebar.component';
   styleUrl: './home.component.scss',
   templateUrl: './home.component.html',
 })
-export class Home {}
+export class HomeComponent {}
