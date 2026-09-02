@@ -1,59 +1,170 @@
-# DesafioPraticoAngular
+# Desafio Prático Angular - Módulo Contábil
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
+Um módulo de contabilidade completo desenvolvido em **Angular 22.1** com funcionalidades para gerenciar lançamentos contábeis, pesquisa de lotes e validações avançadas.
 
-## Development server
+## 📋 Requisitos Implementados
 
-To start a local development server, run:
+### ✅ Funcionalidades Principais
 
-```bash
-ng serve
-```
+- **Página de Pesquisa**: Busca avançada de créditos/débitos com filtros por ID, valor, data e situação
+- **Modal de Lançamentos**: Formulário reativo para criar/editar lançamentos contábeis
+- **Seleção de Lotes**: Checkboxes para seleção individual e em massa de lotes
+- **Paginação Customizada**: Componente de paginação reusável
+- **Filtros Reutilizáveis**: Painel de filtros com projeção de conteúdo
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### ✅ Tecnologias & Padrões
 
-## Code scaffolding
+- **TypeScript com tipagem explícita** - Interfaces e tipos bem definidos
+- **Formulários Reativos** - FormBuilder, FormGroup, validadores customizados
+- **RxJS** - Observables, debounce, distinctUntilChanged
+- **Angular Material** - Componentes, ícones, diálogos
+- **Standalone Components** - Arquitetura moderna do Angular
+- **SCSS com variáveis centralizadas** - Temas consistentes
+- **Jasmine + Karma** - Testes unitários completos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### ✅ Validações
 
-```bash
-ng generate component component-name
-```
+- **Validadores de Range** - Validação de intervalos (De/Até)
+- **Validadores de Data** - Validação de datas com range
+- **Validadores Customizados** - Validações específicas do domínio
+- **Indicadores de Carregamento** - UX melhorada durante requisições
+- **Tratamento de Erros** - Mensagens claras ao usuário
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### ✅ Acessibilidade
 
-```bash
-ng generate --help
-```
+- **ARIA labels** - Labels acessíveis para elementos
+- **Role attributes** - Semântica correta para leitores de tela
+- **Focus management** - Navegação por teclado
+- **Mensagens de erro** - Alertas acessíveis com role="alert"
 
-## Building
+## 🚀 Como Começar
 
-To build the project run:
+### Pré-requisitos
+- Node.js 18+
+- npm 11+
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Instalação
 
 ```bash
-ng e2e
+# Clonar o repositório
+git clone <repository-url>
+cd desafio-pratico-angular
+
+# Instalar dependências
+npm install
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Desenvolvimento
 
-## Additional Resources
+```bash
+# Iniciar servidor de desenvolvimento
+npm start
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Acessar em http://localhost:4200
+```
+
+### Testes
+
+```bash
+# Rodar testes unitários
+npm test
+
+# Testes com Jasmine/Karma em modo headless
+# Cobertura: 57 testes, todos passando
+```
+
+### Build
+
+```bash
+# Build para produção
+npm run build
+
+# Output em dist/
+```
+
+## 📁 Estrutura do Projeto
+
+```
+src/
+├── app/
+│   ├── contabil/                    # Módulo contábil
+│   │   ├── components/
+│   │   │   ├── entry-modal/        # Modal de lançamentos
+│   │   │   └── other-credits-debits-page/  # Página de pesquisa
+│   │   ├── service/
+│   │   │   └── contabil.service.ts # Serviço de contabilidade
+│   │   └── models/
+│   │       └── lote.model.ts       # Interfaces de dados
+│   ├── shared/                      # Componentes reutilizáveis
+│   │   ├── components/
+│   │   │   ├── header/             # Cabeçalho
+│   │   │   ├── sidebar/            # Barra lateral
+│   │   │   ├── filter-panel/       # Painel de filtros
+│   │   │   └── pagination/         # Paginação
+│   │   └── pipes/
+│   │       └── currency-br.pipe.ts # Formatação de moeda
+│   ├── layouts/
+│   │   └── components/
+│   │       └── home/               # Layout principal
+│   ├── app.ts                       # Componente raiz
+│   └── app.routes.ts               # Rotas da aplicação
+├── styles-variables.scss           # Variáveis de estilo globais
+└── test.ts                          # Configuração de testes
+```
+
+## 🧪 Testes
+
+### Cobertura
+
+- **ContabilService** - 16 testes
+- **OtherCreditsDebitsPageComponent** - 19 testes
+- **EntryModalComponent** - 18 testes
+- **FilterPanelComponent** - 4 testes
+
+**Total: 57 testes ✅ Todos passando**
+
+## 🎨 Temas e Cores
+
+Variáveis em `styles-variables.scss`:
+
+```scss
+$color-primary-dark: #1a7a7a;    // Verde escuro
+$color-primary: #20c997;          // Verde claro
+$color-primary-light: #e8f8f5;    // Verde bem claro
+```
+
+## 📦 Dependências Principais
+
+- `@angular/core` - Framework
+- `@angular/material` - Componentes UI
+- `@angular/forms` - Formulários reativos
+- `rxjs` - Programação reativa
+- `typescript` - Tipagem estática
+
+## 📝 Padrões de Código
+
+### Type Safety
+
+```typescript
+// ✅ Bom
+function pesquisarLotes(filtros: FiltrosPesquisa): Observable<ResultadoPesquisa>
+
+// ❌ Evitar
+function pesquisarLotes(filtros: any): any
+```
+
+## 🚦 Status
+
+| Recurso | Status |
+|---------|--------|
+| Estrutura | ✅ |
+| Componentes | ✅ |
+| Serviços | ✅ |
+| Modelos | ✅ |
+| Validações | ✅ |
+| Testes (57/57) | ✅ |
+| Documentação | ✅ |
+
+---
+
+**Última atualização**: 2026-09-02
