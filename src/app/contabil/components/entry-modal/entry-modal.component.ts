@@ -141,6 +141,25 @@ export class EntryModalComponent implements OnInit {
     return this.entryForm.valid && this.contaSelecionada !== null;
   }
 
+  getFieldError(fieldName: string): string {
+    const control = this.entryForm.get(fieldName);
+    if (!control || !control.errors || !control.touched) {
+      return '';
+    }
+
+    if (control.errors['required']) {
+      return 'Campo obrigatório';
+    }
+    if (control.errors['min']) {
+      return 'Valor deve ser positivo (mínimo 0.01)';
+    }
+    if (control.errors['pattern']) {
+      return 'Formato inválido';
+    }
+
+    return '';
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {

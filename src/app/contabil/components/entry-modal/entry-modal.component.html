@@ -68,17 +68,22 @@
                 id="valor"
                 type="number"
                 step="0.01"
-                min="0"
+                min="0.01"
                 placeholder="0,00"
                 formControlName="valor"
+                (blur)="entryForm.markAllAsTouched()"
+                aria-label="Valor do Lançamento"
               />
+              @if (getFieldError('valor')) {
+                <span class="error-message" role="alert">{{ getFieldError('valor') }}</span>
+              }
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="historico">Histórico*</label>
-              <select id="historico" formControlName="historico" class="custom-select">
+              <select id="historico" formControlName="historico" class="custom-select" (blur)="entryForm.markAllAsTouched()" aria-label="Histórico">
                 <option value="">Selecione...</option>
                 @for (option of historicosOptions; track option.value) {
                   <option [value]="option.value">
@@ -86,6 +91,9 @@
                   </option>
                 }
               </select>
+              @if (getFieldError('historico')) {
+                <span class="error-message" role="alert">{{ getFieldError('historico') }}</span>
+              }
             </div>
           </div>
 
@@ -101,7 +109,12 @@
               type="text"
               placeholder="Número do documento"
               formControlName="documento"
+              (blur)="entryForm.markAllAsTouched()"
+              aria-label="Número do Documento"
             />
+            @if (getFieldError('documento')) {
+              <span class="error-message" role="alert">{{ getFieldError('documento') }}</span>
+            }
           </div>
 
           <div class="form-group">
@@ -134,7 +147,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="pa">PA*</label>
-              <select id="pa" formControlName="pa" class="custom-select">
+              <select id="pa" formControlName="pa" class="custom-select" (blur)="entryForm.markAllAsTouched()" aria-label="PA">
                 <option value="">Selecione...</option>
                 @for (option of paOptions; track option.value) {
                   <option [value]="option.value">
@@ -142,6 +155,9 @@
                   </option>
                 }
               </select>
+              @if (getFieldError('pa')) {
+                <span class="error-message" role="alert">{{ getFieldError('pa') }}</span>
+              }
             </div>
           </div>
 

@@ -414,6 +414,14 @@
   }
 }
 
+.error-message {
+  font-size: 12px;
+  color: #dc3545;
+  font-weight: 500;
+  margin-top: 4px;
+  display: block;
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
