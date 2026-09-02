@@ -19,8 +19,19 @@
             color="primary"
             (click)="onSearch()"
             type="button"
+            [disabled]="isLoading"
+            class="search-button"
           >
-            Pesquisar
+            @if (isLoading) {
+              <ng-container>
+                <mat-icon class="loading-spinner">hourglass_empty</mat-icon>
+                <span>Carregando...</span>
+              </ng-container>
+            } @else {
+              <ng-container>
+                Pesquisar
+              </ng-container>
+            }
           </button>
         </div>
       </form>

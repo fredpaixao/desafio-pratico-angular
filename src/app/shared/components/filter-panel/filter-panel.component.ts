@@ -22,6 +22,7 @@ export class FilterPanelComponent {
   @Input() formGroup!: FormGroup;
   @Input() title: string = 'Filtros';
   @Input() subtitle: string = '';
+  @Input() isLoading: boolean = false;
 
   @Output() searchClicked = new EventEmitter<void>();
   @Output() clearClicked = new EventEmitter<void>();

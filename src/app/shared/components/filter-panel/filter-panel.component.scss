@@ -52,6 +52,28 @@
   }
 }
 
+.search-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .loading-spinner {
+    animation: spin 1s linear infinite;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 mat-panel-title {
   display: flex;
   flex-direction: column;

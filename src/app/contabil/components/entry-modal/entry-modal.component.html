@@ -30,9 +30,14 @@
                 (input)="onContaSearch($event.target.value)"
                 formControlName="contaCorrente"
                 class="search-input"
+                [disabled]="isSearchingAccount"
               />
-              <button type="button" class="search-btn">
-                <mat-icon>search</mat-icon>
+              <button type="button" class="search-btn" [disabled]="isSearchingAccount">
+                @if (isSearchingAccount) {
+                  <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+                } @else {
+                  <mat-icon>search</mat-icon>
+                }
               </button>
 
               @if (showSearchResults && contasSearchResults.length > 0) {

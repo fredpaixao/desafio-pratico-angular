@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ContabilService, OptionValue } from '../../service/contabil.service';
 import { Lancamento, ContaCorrente, Anexo } from '../../models/lote.model';
 
@@ -22,7 +24,7 @@ import { Lancamento, ContaCorrente, Anexo } from '../../models/lote.model';
   templateUrl: './entry-modal.component.html',
   styleUrl: './entry-modal.component.scss',
 })
-export class EntryModalComponent implements OnInit {
+export class EntryModalComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   entryForm!: FormGroup;
@@ -34,6 +36,11 @@ export class EntryModalComponent implements OnInit {
   anexos: Anexo[] = [];
   displayedColumnsAnexos: string[] = ['nomeReduzido', 'descricao', 'dataInclusao', 'idUsuario'];
 
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
+  isSearchingAccount: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private contabilService: ContabilService,
@@ -43,6 +50,23 @@ export class EntryModalComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.carregarOpcoes();
+    this.setupSearchDebounce();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupSearchDebounce(): void {
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+      )
+      .subscribe((termo: string): void => {
+        this.performSearch(termo);
+      });
   }
 
   private carregarOpcoes(): void {
@@ -79,18 +103,26 @@ export class EntryModalComponent implements OnInit {
   onContaSearch(termo: string): void {
     if (!termo || termo.length < 1) {
       this.showSearchResults = false;
+      this.contasSearchResults = [];
       return;
     }
 
+    this.searchSubject.next(termo);
+  }
+
+  private performSearch(termo: string): void {
+    this.isSearchingAccount = true;
     this.contabilService.buscarContasCorrentes(termo).subscribe({
       next: (contas: ContaCorrente[]): void => {
         this.contasSearchResults = contas;
         this.showSearchResults = contas.length > 0;
+        this.isSearchingAccount = false;
       },
       error: (erro: unknown): void => {
         console.error('Erro ao buscar contas:', erro);
         this.contasSearchResults = [];
         this.showSearchResults = false;
+        this.isSearchingAccount = false;
       },
     });
   }

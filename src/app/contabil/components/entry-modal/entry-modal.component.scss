@@ -422,6 +422,19 @@
   display: block;
 }
 
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
