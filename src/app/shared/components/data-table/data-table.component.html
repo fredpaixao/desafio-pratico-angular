@@ -1,0 +1,77 @@
+<div class="data-table-wrapper">
+  @if (isLoading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando dados...</p>
+    </div>
+  } @else {
+    <table mat-table [dataSource]="dataSource" class="data-table">
+      <!-- Checkbox Column -->
+      @if (enableSelection) {
+        <ng-container matColumnDef="checkbox">
+          <th mat-header-cell *matHeaderCellDef class="checkbox-column">
+            <input
+              type="checkbox"
+              [checked]="isAllSelected"
+              (change)="onSelectAll($event)"
+              aria-label="Selecionar todos"
+            />
+          </th>
+          <td mat-cell *matCellDef="let element" class="checkbox-column">
+            <input
+              type="checkbox"
+              [checked]="isRowSelected(element)"
+              (change)="onSelectRow(element, $event)"
+              aria-label="Selecionar Individual"
+              [attr.aria-label]="'Selecionar ' + element[identifierKey]"
+            />
+          </td>
+        </ng-container>
+      }
+
+      <!-- Dynamic Columns -->
+      @for (column of columns; track column.key) {
+        <ng-container [matColumnDef]="column.key">
+          <th mat-header-cell *matHeaderCellDef [style.width]="column.width">
+            {{ column.label }}
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="onRowClick(element, $event)"
+            class="data-cell"
+          >
+            @switch (column.type) {
+              @case ('currency') {
+                {{ getColumnValue(element, column) | currencyBr }}
+              }
+              @case ('number') {
+                {{ getColumnValue(element, column) }}
+              }
+              @case ('date') {
+                {{ getColumnValue(element, column) | date : 'short' }}
+              }
+              @default {
+                {{ getColumnValue(element, column) }}
+              }
+            }
+          </td>
+        </ng-container>
+      }
+
+      <!-- Header and Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsWithSelection"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumnsWithSelection"
+        class="data-row"
+      ></tr>
+    </table>
+
+    @if (dataSource.length === 0) {
+      <div class="empty-state">
+        <p>Nenhum dado disponível</p>
+      </div>
+    }
+  }
+</div>

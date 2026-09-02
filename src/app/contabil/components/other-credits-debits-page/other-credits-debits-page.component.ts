@@ -4,14 +4,12 @@ import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Header } from "../../../shared/components/header/header.component";
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { FilterPanelComponent } from '../../../shared/components/filter-panel/filter-panel.component';
+import { DataTableComponent, ColumnConfig } from '../../../shared/components/data-table/data-table.component';
 import { EntryModalComponent } from '../entry-modal/entry-modal.component';
-import { CurrencyBrPipe } from '../../../shared/pipes/currency-br.pipe';
 import { ContabilService } from '../../service/contabil.service';
 import { Lote, FiltrosPesquisa, ResultadoPesquisa, Lancamento } from '../../models/lote.model';
 
@@ -22,13 +20,11 @@ import { Lote, FiltrosPesquisa, ResultadoPesquisa, Lancamento } from '../../mode
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule,
-    MatCheckboxModule,
     MatDialogModule,
     Header,
     PaginationComponent,
     FilterPanelComponent,
-    CurrencyBrPipe,
+    DataTableComponent,
   ],
   selector: 'app-other-credits-debits-page',
   styleUrl: './other-credits-debits-page.component.scss',
@@ -37,8 +33,25 @@ import { Lote, FiltrosPesquisa, ResultadoPesquisa, Lancamento } from '../../mode
 export class OtherCreditsDebitsPage implements OnInit {
   filterForm!: FormGroup;
 
-  displayedColumns: string[] = [
-    'checkbox',
+  tableData: Lote[] = [];
+  isLoading: boolean = false;
+  totalResultados: number = 0;
+  selectedLotes: Lote[] = [];
+  pageIndex: number = 0;
+  pageSize: number = 5;
+
+  tableColumns: ColumnConfig[] = [
+    { key: 'idLote', label: 'ID Lote', type: 'number' },
+    { key: 'dataEntrada', label: 'Data Entrada', type: 'text' },
+    { key: 'valor', label: 'Valor', type: 'currency' },
+    { key: 'quantLancamentos', label: 'Quant. Lançamentos', type: 'number' },
+    { key: 'usuarioRegistro', label: 'Usuário Registro', type: 'text' },
+    { key: 'usuarioAprovacao', label: 'Usuário Aprovação', type: 'text' },
+    { key: 'situacaoLote', label: 'Situação Lote', type: 'text' },
+    { key: 'dataHoraSituacao', label: 'Data/Hora Situação', type: 'text' },
+  ];
+
+  displayColumns: string[] = [
     'idLote',
     'dataEntrada',
     'valor',
@@ -48,14 +61,7 @@ export class OtherCreditsDebitsPage implements OnInit {
     'situacaoLote',
     'dataHoraSituacao',
   ];
-  tableData: Lote[] = [];
-  isLoading: boolean = false;
-  totalResultados: number = 0;
-  selectedLoteIds: number[] = [];
-  pageIndex: number = 0;
-  pageSize: number = 5;
 
-  isAllSelected: boolean = false;
   canAlterarExcluirVisualizar: boolean = false;
   canConfirmar: boolean = true;
   canEnviar: boolean = true;
@@ -203,8 +209,7 @@ export class OtherCreditsDebitsPage implements OnInit {
     this.isLoading = true;
     this.cdr.detectChanges();
     this.pageIndex = 0;
-    this.selectedLoteIds = [];
-    this.updateButtonStates();
+    this.selectedLotes = [];
     const filtros: any = this.filterForm.value;
     this.currentFiltros = filtros;
 
@@ -236,16 +241,14 @@ export class OtherCreditsDebitsPage implements OnInit {
     });
     this.tableData = [];
     this.totalResultados = 0;
-    this.selectedLoteIds = [];
-    this.updateButtonStates();
+    this.selectedLotes = [];
   }
 
 
   onPageChange(event: { pageIndex: number; pageSize: number }): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.selectedLoteIds = [];
-    this.updateButtonStates();
+    this.selectedLotes = [];
 
     this.contabilService.pesquisarLotes(this.currentFiltros, this.pageIndex, this.pageSize).subscribe({
       next: (resultado: ResultadoPesquisa): void => {
@@ -264,33 +267,9 @@ export class OtherCreditsDebitsPage implements OnInit {
     });
   }
 
-  toggleSelectAll(event: any): void {
-    if (event.target.checked) {
-      this.selectedLoteIds = this.tableData.map((lote: Lote) => lote.idLote);
-    } else {
-      this.selectedLoteIds = [];
-    }
-    this.updateButtonStates();
-  }
-
-  toggleSelectLote(idLote: number, event: any): void {
-    if (event.target.checked) {
-      if (!this.selectedLoteIds.includes(idLote)) {
-        this.selectedLoteIds.push(idLote);
-      }
-    } else {
-      this.selectedLoteIds = this.selectedLoteIds.filter((id: number) => id !== idLote);
-    }
-    this.updateButtonStates();
-  }
-
-  isLoteSelected(idLote: number): boolean {
-    return this.selectedLoteIds.includes(idLote);
-  }
-
-  private updateButtonStates(): void {
-    this.isAllSelected = this.tableData.length > 0 && this.selectedLoteIds.length === this.tableData.length;
-    this.canAlterarExcluirVisualizar = this.selectedLoteIds.length === 1;
+  onTableSelectionChange(selectedLotes: Lote[]): void {
+    this.selectedLotes = selectedLotes;
+    this.canAlterarExcluirVisualizar = selectedLotes.length === 1;
   }
 
   onConfirmar(): void {

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { OtherCreditsDebitsPage } from './other-credits-debits-page.component';
+import { Lote } from '../../models/lote.model';
 
 describe('OtherCreditsDebitsPage', () => {
   let component: OtherCreditsDebitsPage;
@@ -59,21 +60,39 @@ describe('OtherCreditsDebitsPage', () => {
     });
   });
 
-  describe('Lote Selection', () => {
-    it('should have toggleSelectAll method', () => {
-      expect(typeof component.toggleSelectAll).toBe('function');
+  describe('Table Selection', () => {
+    it('should have onTableSelectionChange method', () => {
+      expect(typeof component.onTableSelectionChange).toBe('function');
     });
 
-    it('should have toggleSelectLote method', () => {
-      expect(typeof component.toggleSelectLote).toBe('function');
+    it('should have selectedLotes array', () => {
+      expect(Array.isArray(component.selectedLotes)).toBe(true);
     });
 
-    it('should have isLoteSelected method', () => {
-      expect(typeof component.isLoteSelected).toBe('function');
+    it('should update selectedLotes on table selection change', () => {
+      const mockLotes: Lote[] = [
+        { idLote: 1, dataEntrada: '2026-01-01', valor: 1000, quantLancamentos: 5, usuarioRegistro: 'user1', usuarioAprovacao: 'user2', situacaoLote: 'Aberto', dataHoraSituacao: '2026-01-01 10:00:00' },
+      ];
+      component.onTableSelectionChange(mockLotes);
+      expect(component.selectedLotes.length).toBe(1);
+      expect(component.selectedLotes[0].idLote).toBe(1);
     });
 
-    it('should have selectedLoteIds array', () => {
-      expect(Array.isArray(component.selectedLoteIds)).toBe(true);
+    it('should enable alterar/excluir/visualizar when one lote is selected', () => {
+      const mockLotes: Lote[] = [
+        { idLote: 1, dataEntrada: '2026-01-01', valor: 1000, quantLancamentos: 5, usuarioRegistro: 'user1', usuarioAprovacao: 'user2', situacaoLote: 'Aberto', dataHoraSituacao: '2026-01-01 10:00:00' },
+      ];
+      component.onTableSelectionChange(mockLotes);
+      expect(component.canAlterarExcluirVisualizar).toBe(true);
+    });
+
+    it('should disable alterar/excluir/visualizar when multiple lotes are selected', () => {
+      const mockLotes: Lote[] = [
+        { idLote: 1, dataEntrada: '2026-01-01', valor: 1000, quantLancamentos: 5, usuarioRegistro: 'user1', usuarioAprovacao: 'user2', situacaoLote: 'Aberto', dataHoraSituacao: '2026-01-01 10:00:00' },
+        { idLote: 2, dataEntrada: '2026-01-02', valor: 2500, quantLancamentos: 3, usuarioRegistro: 'user1', usuarioAprovacao: 'user2', situacaoLote: 'Confirmado', dataHoraSituacao: '2026-01-02 10:00:00' },
+      ];
+      component.onTableSelectionChange(mockLotes);
+      expect(component.canAlterarExcluirVisualizar).toBe(false);
     });
   });
 

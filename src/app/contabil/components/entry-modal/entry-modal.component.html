@@ -1,10 +1,4 @@
-<input
-  #fileInput
-  type="file"
-  (change)="onFileSelected($event)"
-  class="file-input"
-  hidden
-/>
+<input #fileInput type="file" (change)="onFileSelected($event)" class="file-input" hidden />
 
 <app-form-modal
   [formGroup]="entryForm"
@@ -12,258 +6,240 @@
   [submitButtonText]="'Salvar'"
   [cancelButtonText]="'Cancelar'"
   (submitted)="onSubmit()"
-  (cancelled)="onCancel()">
-      <div class="form-section">
-        <h3>Conta Corrente</h3>
+  (cancelled)="onCancel()"
+>
+  <div class="form-section">
+    <h3>Conta Corrente</h3>
 
-        <div class="form-section-card">
-          <div class="form-group">
-            <label for="contaCorrente">Conta Corrente*</label>
-            <div class="conta-search-wrapper">
-              <input
-                id="contaCorrente"
-                type="text"
-                placeholder="Digite o número, nome ou titular"
-                (input)="onContaSearch($event.target.value)"
-                formControlName="contaCorrente"
-                class="search-input"
-                [disabled]="isSearchingAccount"
-              />
-              <button type="button" class="search-btn" [disabled]="isSearchingAccount">
-                @if (isSearchingAccount) {
-                  <mat-icon class="loading-icon">hourglass_empty</mat-icon>
-                } @else {
-                  <mat-icon>search</mat-icon>
-                }
-              </button>
+    <div class="form-section-card">
+      <div class="form-group">
+        <label for="contaCorrente">Conta Corrente*</label>
+        <div class="conta-search-wrapper">
+          <input
+            id="contaCorrente"
+            type="text"
+            placeholder="Digite o número, nome ou titular"
+            (input)="onContaSearch($event.target.value)"
+            formControlName="contaCorrente"
+            class="search-input"
+            [disabled]="isSearchingAccount"
+          />
+          <button type="button" class="search-btn" [disabled]="isSearchingAccount">
+            @if (isSearchingAccount) {
+              <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+            } @else {
+              <mat-icon>search</mat-icon>
+            }
+          </button>
 
-              @if (showSearchResults && contasSearchResults.length > 0) {
-                <div class="search-results">
-                  @for (conta of contasSearchResults; track conta.id) {
-                    <div class="result-item" (click)="selectContaCorrente(conta)">
-                      <div class="result-number">{{ conta.numero }}</div>
-                      <div class="result-info">
-                        <div class="result-nome">{{ conta.nome }}</div>
-                        <div class="result-titular">{{ conta.titular }}</div>
-                      </div>
-                    </div>
-                  }
+          @if (showSearchResults && contasSearchResults.length > 0) {
+            <div class="search-results">
+              @for (conta of contasSearchResults; track conta.id) {
+                <div class="result-item" (click)="selectContaCorrente(conta)">
+                  <div class="result-number">{{ conta.numero }}</div>
+                  <div class="result-info">
+                    <div class="result-nome">{{ conta.nome }}</div>
+                    <div class="result-titular">{{ conta.titular }}</div>
+                  </div>
                 </div>
               }
             </div>
-
-            @if (contaSelecionada) {
-              <div class="conta-selecionada">
-                <span class="titular-label">Titular:</span>
-                <span class="titular-nome">{{ contaSelecionada.titular }}</span>
-                <button type="button" class="clear-btn" (click)="clearContaCorrente()">
-                  <mat-icon>close</mat-icon>
-                </button>
-              </div>
-            }
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="valor">Valor*</label>
-              <input
-                id="valor"
-                type="number"
-                step="0.01"
-                min="0.01"
-                placeholder="0,00"
-                formControlName="valor"
-                (blur)="entryForm.markAllAsTouched()"
-                aria-label="Valor do Lançamento"
-              />
-              @if (getFieldError('valor')) {
-                <span class="error-message" role="alert">{{ getFieldError('valor') }}</span>
-              }
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="historico">Histórico*</label>
-              <select id="historico" formControlName="historico" class="custom-select" (blur)="entryForm.markAllAsTouched()" aria-label="Histórico">
-                <option value="">Selecione...</option>
-                @for (option of historicosOptions; track option.value) {
-                  <option [value]="option.value">
-                    {{ option.label }}
-                  </option>
-                }
-              </select>
-              @if (getFieldError('historico')) {
-                <span class="error-message" role="alert">{{ getFieldError('historico') }}</span>
-              }
-            </div>
-          </div>
-
-          <div class="form-group checkbox-group">
-            <input id="estorno" type="checkbox" formControlName="estorno" />
-            <label for="estorno">Estorno</label>
-          </div>
-
-          <div class="form-group">
-            <label for="documento">Documento*</label>
-            <input
-              id="documento"
-              type="text"
-              placeholder="Número do documento"
-              formControlName="documento"
-              (blur)="entryForm.markAllAsTouched()"
-              aria-label="Número do Documento"
-            />
-            @if (getFieldError('documento')) {
-              <span class="error-message" role="alert">{{ getFieldError('documento') }}</span>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="descricao">Descrição</label>
-            <textarea
-              id="descricao"
-              placeholder="Digite uma descrição (opcional)"
-              formControlName="descricao"
-              rows="4"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="situacao">Situação</label>
-            <input
-              id="situacao"
-              type="text"
-              formControlName="situacao"
-              readonly
-              class="readonly-input"
-            />
-          </div>
+          }
         </div>
+
+        @if (contaSelecionada) {
+          <div class="conta-selecionada">
+            <span class="titular-label">Titular:</span>
+            <span class="titular-nome">{{ contaSelecionada.titular }}</span>
+            <button type="button" class="clear-btn" (click)="clearContaCorrente()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
       </div>
 
-      <div class="form-section">
-        <h3>Documento CSC</h3>
-
-        <div class="form-section-card">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="pa">PA*</label>
-              <select id="pa" formControlName="pa" class="custom-select" (blur)="entryForm.markAllAsTouched()" aria-label="PA">
-                <option value="">Selecione...</option>
-                @for (option of paOptions; track option.value) {
-                  <option [value]="option.value">
-                    {{ option.label }}
-                  </option>
-                }
-              </select>
-              @if (getFieldError('pa')) {
-                <span class="error-message" role="alert">{{ getFieldError('pa') }}</span>
-              }
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="idEvento">ID Evento</label>
-              <input
-                id="idEvento"
-                type="text"
-                placeholder="ID do evento"
-                formControlName="idEvento"
-              />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="complHistorico">Compl. Histórico</label>
-            <textarea
-              id="complHistorico"
-              placeholder="Digite informações complementares (opcional)"
-              formControlName="complHistorico"
-              rows="3"
-            ></textarea>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="situacaoCsc">Situação</label>
-              <input
-                id="situacaoCsc"
-                type="text"
-                formControlName="situacaoCsc"
-                readonly
-                class="readonly-input"
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="idDocCsc">ID Doc CSC</label>
-              <input
-                id="idDocCsc"
-                type="text"
-                placeholder="ID do documento"
-                formControlName="idDocCsc"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-section">
-        <h3>Anexos</h3>
-
-        <div class="anexos-section">
-          @if (anexos.length > 0) {
-            <div class="anexos-table-wrapper">
-              <table mat-table [dataSource]="anexos" class="anexos-table">
-                <ng-container matColumnDef="nomeReduzido">
-                  <th mat-header-cell *matHeaderCellDef>Nome Reduzido do Arquivo</th>
-                  <td mat-cell *matCellDef="let element">{{ element.nomeReduzido }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="descricao">
-                  <th mat-header-cell *matHeaderCellDef>Descrição</th>
-                  <td mat-cell *matCellDef="let element">{{ element.descricao }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="dataInclusao">
-                  <th mat-header-cell *matHeaderCellDef>Data Inclusão</th>
-                  <td mat-cell *matCellDef="let element">{{ element.dataInclusao }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="idUsuario">
-                  <th mat-header-cell *matHeaderCellDef>ID Usuário</th>
-                  <td mat-cell *matCellDef="let element">{{ element.idUsuario }}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumnsAnexos"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsAnexos"></tr>
-              </table>
-            </div>
-
-            <div class="anexos-actions">
-              <button class="btn-stroked" (click)="onVisualizarAnexo()" type="button">
-                Visualizar
-              </button>
-              <button class="btn-stroked" (click)="onIncluirAnexo()" type="button">
-                Incluir
-              </button>
-              <button class="btn-stroked" (click)="onExcluirAnexo()" type="button">
-                Excluir
-              </button>
-            </div>
-          } @else {
-            <div class="anexos-empty">
-              <p>Nenhum anexo adicionado</p>
-              <button class="btn-stroked" (click)="onIncluirAnexo()" type="button">
-                Adicionar Anexo
-              </button>
-            </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="valor">Valor*</label>
+          <input
+            id="valor"
+            type="number"
+            step="0.01"
+            min="0.01"
+            placeholder="0,00"
+            formControlName="valor"
+            (blur)="entryForm.markAllAsTouched()"
+            aria-label="Valor do Lançamento"
+          />
+          @if (getFieldError('valor')) {
+            <span class="error-message" role="alert">{{ getFieldError('valor') }}</span>
           }
         </div>
       </div>
 
-  </app-form-modal>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="historico">Histórico*</label>
+          <select
+            id="historico"
+            formControlName="historico"
+            class="custom-select"
+            (blur)="entryForm.markAllAsTouched()"
+            aria-label="Histórico"
+          >
+            <option value="">Selecione...</option>
+            @for (option of historicosOptions; track option.value) {
+              <option [value]="option.value">
+                {{ option.label }}
+              </option>
+            }
+          </select>
+          @if (getFieldError('historico')) {
+            <span class="error-message" role="alert">{{ getFieldError('historico') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input id="estorno" type="checkbox" formControlName="estorno" />
+        <label for="estorno">Estorno</label>
+      </div>
+
+      <div class="form-group">
+        <label for="documento">Documento*</label>
+        <input
+          id="documento"
+          type="text"
+          placeholder="Número do documento"
+          formControlName="documento"
+          (blur)="entryForm.markAllAsTouched()"
+          aria-label="Número do Documento"
+        />
+        @if (getFieldError('documento')) {
+          <span class="error-message" role="alert">{{ getFieldError('documento') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea
+          id="descricao"
+          placeholder="Digite uma descrição (opcional)"
+          formControlName="descricao"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="situacao">Situação</label>
+        <input
+          id="situacao"
+          type="text"
+          formControlName="situacao"
+          readonly
+          class="readonly-input"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Documento CSC</h3>
+
+    <div class="form-section-card">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pa">PA*</label>
+          <select
+            id="pa"
+            formControlName="pa"
+            class="custom-select"
+            (blur)="entryForm.markAllAsTouched()"
+            aria-label="PA"
+          >
+            <option value="">Selecione...</option>
+            @for (option of paOptions; track option.value) {
+              <option [value]="option.value">
+                {{ option.label }}
+              </option>
+            }
+          </select>
+          @if (getFieldError('pa')) {
+            <span class="error-message" role="alert">{{ getFieldError('pa') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="idEvento">ID Evento</label>
+          <input id="idEvento" type="text" placeholder="ID do evento" formControlName="idEvento" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="complHistorico">Compl. Histórico</label>
+        <textarea
+          id="complHistorico"
+          placeholder="Digite informações complementares (opcional)"
+          formControlName="complHistorico"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="situacaoCsc">Situação</label>
+          <input
+            id="situacaoCsc"
+            type="text"
+            formControlName="situacaoCsc"
+            readonly
+            class="readonly-input"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="idDocCsc">ID Doc CSC</label>
+          <input
+            id="idDocCsc"
+            type="text"
+            placeholder="ID do documento"
+            formControlName="idDocCsc"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Anexos</h3>
+
+    <div class="anexos-section">
+      <div class="anexos-table-wrapper">
+        <app-data-table
+          [dataSource]="anexos"
+          [columns]="tableColumnsAnexos"
+          [displayColumns]="displayedColumnsAnexos"
+          [enableSelection]="false"
+          [identifierKey]="'id'"
+        >
+        </app-data-table>
+      </div>
+
+      @if (anexos.length > 0) {
+        <div class="anexos-actions">
+          <button class="btn-stroked" (click)="onVisualizarAnexo()" type="button">
+            Visualizar
+          </button>
+          <button class="btn-stroked" (click)="onIncluirAnexo()" type="button">Incluir</button>
+          <button class="btn-stroked" (click)="onExcluirAnexo()" type="button">Excluir</button>
+        </div>
+      } @else {
+        <button class="btn-stroked" (click)="onIncluirAnexo()" type="button">Incluir</button>
+      }
+    </div>
+  </div>
+</app-form-modal>

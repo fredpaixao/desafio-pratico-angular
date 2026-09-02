@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ContabilService, OptionValue } from '../../service/contabil.service';
 import { Lancamento, ContaCorrente, Anexo } from '../../models/lote.model';
 import { FormModalComponent } from '../../../shared/components/form-modal/form-modal.component';
+import { DataTableComponent, ColumnConfig } from '../../../shared/components/data-table/data-table.component';
 
 @Component({
   selector: 'app-entry-modal',
@@ -20,8 +20,8 @@ import { FormModalComponent } from '../../../shared/components/form-modal/form-m
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule,
     FormModalComponent,
+    DataTableComponent,
   ],
   templateUrl: './entry-modal.component.html',
   styleUrl: './entry-modal.component.scss',
@@ -36,6 +36,14 @@ export class EntryModalComponent implements OnInit, OnDestroy {
   historicosOptions: OptionValue[] = [];
   paOptions: OptionValue[] = [];
   anexos: Anexo[] = [];
+
+  tableColumnsAnexos: ColumnConfig[] = [
+    { key: 'nomeReduzido', label: 'Nome Reduzido do Arquivo', type: 'text' },
+    { key: 'descricao', label: 'Descrição', type: 'text' },
+    { key: 'dataInclusao', label: 'Data Inclusão', type: 'text' },
+    { key: 'idUsuario', label: 'ID Usuário', type: 'text' },
+  ];
+
   displayedColumnsAnexos: string[] = ['nomeReduzido', 'descricao', 'dataInclusao', 'idUsuario'];
 
   private searchSubject = new Subject<string>();
@@ -209,7 +217,7 @@ export class EntryModalComponent implements OnInit, OnDestroy {
         idUsuario: 'user_001',
       };
 
-      this.anexos.push(anexo);
+      this.anexos = [...this.anexos, anexo];
       console.log('Anexo adicionado:', anexo);
       input.value = '';
     }
@@ -225,7 +233,7 @@ export class EntryModalComponent implements OnInit, OnDestroy {
 
   onExcluirAnexo(): void {
     if (this.anexos.length > 0) {
-      this.anexos.pop();
+      this.anexos = this.anexos.slice(0, -1);
       console.log('Último anexo removido');
     }
   }
